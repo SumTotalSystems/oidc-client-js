@@ -38,7 +38,8 @@ export class OidcClientSettings {
         MetadataServiceCtor = MetadataService,
         // extra query params
         extraQueryParams = {},
-        extraTokenParams = {}
+        extraTokenParams = {},
+        timeInsensitive = false
     } = {}) {
 
         this._authority = authority;
@@ -77,6 +78,7 @@ export class OidcClientSettings {
 
         this._extraQueryParams = typeof extraQueryParams === 'object' ? extraQueryParams : {};
         this._extraTokenParams = typeof extraTokenParams === 'object' ? extraTokenParams : {};
+        this._timeInsensitive = timeInsensitive;
     }
 
     // client config
@@ -239,6 +241,9 @@ export class OidcClientSettings {
         } else {
             this._extraTokenParams = {};
         }
+    }
+    get timeInsensitive() {
+        return this._timeInsensitive;
     }
 
     // get the time

@@ -281,9 +281,9 @@ export class ResponseValidator {
             let audience = state.client_id;
             let clockSkewInSeconds = this._settings.clockSkew;
             Log.debug("ResponseValidator._validateIdTokenAttributes: Validaing JWT attributes; using clock skew (in seconds) of: ", clockSkewInSeconds);
-
+            Log.debug(this._settings);
             return this._settings.getEpochTime().then(now => {
-                return this._joseUtil.validateJwtAttributes(response.id_token, issuer, audience, clockSkewInSeconds, now).then(payload => {
+                return this._joseUtil.validateJwtAttributes(response.id_token, issuer, audience, clockSkewInSeconds, now, this._settings.timeInsensitive).then(payload => {
                 
                     if (state.nonce && state.nonce !== payload.nonce) {
                         Log.error("ResponseValidator._validateIdTokenAttributes: Invalid nonce in id_token");
