@@ -200,6 +200,24 @@ let expect = chai.expect;
                 });
             });
 
+            it("should skip time validations when timeInsensitive flag is true", function (done) {
+
+                var p1 = JoseUtil.validateJwt(jwtFromRsa, rsaKey, expectedIssuer, expectedAudience, 0, issuedAt - 1, true);
+                var p2 = JoseUtil.validateJwt(jwtFromRsa, rsaKey, expectedIssuer, expectedAudience, 0, issuedAt - 10, true);
+                Promise.all([p1, p2]).then(()=>{
+                    done();
+                });
+            });
+
+            it("should not skip time validations when timeInsensitive flag is false and should not validate before iat", function (done) {
+
+                JoseUtil.validateJwt(jwtFromRsa, rsaKey, expectedIssuer, expectedAudience, 0, issuedAt - 1, false).catch(e => {
+                    e.message.should.contain("iat");
+                    done();
+                });
+
+            });
+
             it("should now allow iat outside clock skew", function (done) {
 
                 JoseUtil.validateJwt(jwtFromRsa, rsaKey, expectedIssuer, expectedAudience, 10, issuedAt - 11).catch(e => {
